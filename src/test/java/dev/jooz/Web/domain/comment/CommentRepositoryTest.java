@@ -4,6 +4,7 @@ import dev.jooz.Web.domain.account.Account;
 import dev.jooz.Web.domain.account.AccountRepository;
 import dev.jooz.Web.domain.board.Board;
 import dev.jooz.Web.domain.board.BoardRepository;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,7 +33,7 @@ public class CommentRepositoryTest {
     Board board;
 
     @BeforeAll
-    void setUp(){
+    public void setUp(){
         account=Account.builder()
                 .username("user")
                 .password("pass")
@@ -48,8 +49,13 @@ public class CommentRepositoryTest {
         boardRepository.save(board);
     }
 
+    @AfterAll
+    public void cleanUp(){
+        accountRepository.deleteAll();
+    }
+
     @Test
-    void load_comment(){
+    public void load_comment(){
         commentRepository.save(Comment.builder()
                 .account(account)
                 .board(board)
