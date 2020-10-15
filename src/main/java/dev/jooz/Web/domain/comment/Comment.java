@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.comment;
 
+import dev.jooz.Web.domain.AuditorEntity;
 import dev.jooz.Web.domain.account.Account;
 import dev.jooz.Web.domain.board.Board;
 import lombok.Builder;
@@ -12,11 +13,11 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Comment {
+public class Comment extends AuditorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne(targetEntity = Account.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
@@ -29,19 +30,10 @@ public class Comment {
     @Column(length = 255,nullable = false)
     private String content;
 
-    @Column
-    private LocalDateTime created_at;
-
-    @Column
-    private LocalDateTime updated_at;
-
     @Builder
     public Comment(Account account,Board board,String content){
         this.account=account;
         this.board=board;
         this.content=content;
-
-        this.created_at=LocalDateTime.now();
-        this.updated_at= LocalDateTime.now();
     }
 }

@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -69,5 +71,24 @@ public class CommentRepositoryTest {
         assertEquals("Comment Test",comment.getContent());
         assertEquals(board.getTitle(),comment.getBoard().getTitle());
         assertEquals(account.getUsername(),comment.getAccount().getUsername());
+    }
+
+    @Test
+    public void test_auditing(){
+        LocalDateTime now=LocalDateTime.now();
+        Comment comment=Comment.builder()
+                .content("Content")
+                .board(board)
+                .account(account).build();
+        commentRepository.save(comment);
+
+
+
+        Optional<Comment> commentOptional=commentRepository
+                .findById(comment.getId());
+        comment=commentOptional.get();
+
+        assertEquals(comment.getCreated_at().isAfter(now),true);
+
     }
 }
