@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: mysql:8.0.17
+    image: library/mysql:5.7
     container_name: dev_mysql
     ports:
       - "3306:3306"
