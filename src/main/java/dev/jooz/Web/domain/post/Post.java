@@ -1,4 +1,4 @@
-package dev.jooz.Web.domain.board;
+package dev.jooz.Web.domain.post;
 
 import dev.jooz.Web.domain.AuditorEntity;
 import dev.jooz.Web.domain.account.Account;
@@ -7,12 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "board")
-public class Board extends AuditorEntity {
+@Entity(name = "post")
+public class Post extends AuditorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +30,7 @@ public class Board extends AuditorEntity {
     private String content;
 
     @Builder
-    public Board(Account account,String category,String title,String content){
+    public Post(Account account, String category, String title, String content){
         this.account=account;
         this.category=category;
         this.title=title;

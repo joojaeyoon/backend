@@ -2,8 +2,8 @@ package dev.jooz.Web.domain.comment;
 
 import dev.jooz.Web.domain.account.Account;
 import dev.jooz.Web.domain.account.AccountRepository;
-import dev.jooz.Web.domain.board.Board;
-import dev.jooz.Web.domain.board.BoardRepository;
+import dev.jooz.Web.domain.post.Post;
+import dev.jooz.Web.domain.post.PostRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -29,10 +29,10 @@ public class CommentRepositoryTest {
     AccountRepository accountRepository;
 
     @Autowired
-    BoardRepository boardRepository;
+    PostRepository postRepository;
 
     Account account;
-    Board board;
+    Post post;
 
     @BeforeAll
     public void setUp(){
@@ -41,14 +41,14 @@ public class CommentRepositoryTest {
                 .password("pass")
                 .email("email@gmail.com")
                 .build();
-        board=Board.builder()
+        post = Post.builder()
                 .account(account)
                 .category("cate")
                 .content("content")
                 .title("title")
                 .build();
         accountRepository.save(account);
-        boardRepository.save(board);
+        postRepository.save(post);
     }
 
     @AfterAll
@@ -60,7 +60,7 @@ public class CommentRepositoryTest {
     public void load_comment(){
         commentRepository.save(Comment.builder()
                 .account(account)
-                .board(board)
+                .post(post)
                 .content("Comment Test")
                 .build());
 
@@ -69,7 +69,7 @@ public class CommentRepositoryTest {
         Comment comment=commentList.get(0);
 
         assertEquals("Comment Test",comment.getContent());
-        assertEquals(board.getTitle(),comment.getBoard().getTitle());
+        assertEquals(post.getTitle(),comment.getPost().getTitle());
         assertEquals(account.getUsername(),comment.getAccount().getUsername());
     }
 
@@ -78,7 +78,7 @@ public class CommentRepositoryTest {
         LocalDateTime now=LocalDateTime.now();
         Comment comment=Comment.builder()
                 .content("Content")
-                .board(board)
+                .post(post)
                 .account(account).build();
         commentRepository.save(comment);
 

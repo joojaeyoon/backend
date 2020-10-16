@@ -1,4 +1,4 @@
-package dev.jooz.Web.domain.board;
+package dev.jooz.Web.domain.post;
 
 import dev.jooz.Web.domain.account.Account;
 import dev.jooz.Web.domain.account.AccountRepository;
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
-public class BoardRepositoryTest {
+public class PostRepositoryTest {
     @Autowired
     AccountRepository accountRepository;
     @Autowired
-    BoardRepository boardRepository;
+    PostRepository postRepository;
 
     @Test
     public void load_board(){
@@ -27,20 +27,20 @@ public class BoardRepositoryTest {
                 .username("testuser")
                 .build();
         accountRepository.save(account);
-        boardRepository.save(
-                Board.builder()
+        postRepository.save(
+                Post.builder()
                 .account(account)
                 .category("cate")
                 .title("titleTest")
                 .content("testContent")
                 .build());
 
-        List<Board> boardList=boardRepository.findAll();
+        List<Post> postList = postRepository.findAll();
 
-        Board board=boardList.get(0);
+        Post post = postList.get(0);
 
-        assertEquals("cate",board.getCategory());
-        assertEquals(account.getUsername(),board.getAccount().getUsername());
+        assertEquals("cate", post.getCategory());
+        assertEquals(account.getUsername(), post.getAccount().getUsername());
 
     }
 }
