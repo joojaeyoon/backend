@@ -1,18 +1,18 @@
 
 create table account(
     id int AUTO_INCREMENT,
-    email varchar(255),
-    password varchar(255),
-    username varchar(255),
+    email varchar(255) UNIQUE NOT NULL,
+    username varchar(255) NOT NULL,
+    password varchar(255) NOT NULL,
     primary key (id)
 );
 
 create table post(
     id int AUTO_INCREMENT,
     account_id int,
-    category VARCHAR(255) not null,
-    title VARCHAR(255) not null,
-    content VARCHAR(255) not null,
+    category VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content VARCHAR(255) NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,
     primary key(id),
@@ -23,7 +23,7 @@ create table comment(
     id int AUTO_INCREMENT,
     account_id int,
     post_id int,
-    content VARCHAR(255) not null,
+    content VARCHAR(255) NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,
     primary key(id),
