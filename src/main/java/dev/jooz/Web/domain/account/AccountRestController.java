@@ -4,6 +4,7 @@ import dev.jooz.Web.domain.account.exception.EmailExistException;
 import dev.jooz.Web.error.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 

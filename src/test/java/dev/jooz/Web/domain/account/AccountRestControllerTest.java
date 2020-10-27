@@ -54,10 +54,11 @@ public class AccountRestControllerTest {
     }
 
     @Test
+    @DisplayName("유효하지않은 데이터 형식")
     public void create_invalid_account() throws Exception {
         AccountDto.CreateReq dto = AccountDto.CreateReq.builder()
                 .email("test@gmail.com")
-                .username("testUser")
+                .username("testuser")
                 .build();
         AccountDto.AccountRes res = AccountDto.AccountRes.builder()
                 .account(dto.toEntity())
@@ -94,5 +95,4 @@ public class AccountRestControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{code: 'AC_002'}"));
     }
-
 }

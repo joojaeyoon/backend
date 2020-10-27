@@ -2,7 +2,7 @@
 create table account(
     id int AUTO_INCREMENT,
     email varchar(255) UNIQUE NOT NULL,
-    username varchar(255) UNIQUE NOT NULL,
+    username varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
     primary key (id)
 );
