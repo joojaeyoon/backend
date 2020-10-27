@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.account;
 
+import dev.jooz.Web.domain.account.exception.EmailExistException;
 import dev.jooz.Web.error.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,9 @@ public class AccountRestController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public AccountDto.AccountRes createAccount(@RequestBody @Valid final AccountDto.CreateReq dto){
 
-        // TODO 중복가입 예외처리
+        if(accountService.existsByEmail(dto.getEmail())){
+            throw new EmailExistException(dto.getEmail());
+        }
         return new AccountDto.AccountRes(accountService.save(dto));
     }
 }

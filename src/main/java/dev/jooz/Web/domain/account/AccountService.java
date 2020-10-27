@@ -17,6 +17,10 @@ public class AccountService {
         return accountRepository.save(dto.toEntity());
     }
 
+    public boolean existsByEmail(String email){
+        return accountRepository.existsByEmail(email);
+    }
+
     public Account findById(Long id){
         Optional<Account> account=accountRepository.findById(id);
         account.orElseThrow(()-> new NoSuchElementException());

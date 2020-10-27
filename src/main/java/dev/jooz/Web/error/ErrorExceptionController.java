@@ -1,5 +1,6 @@
 package dev.jooz.Web.error;
 
+import dev.jooz.Web.domain.account.exception.EmailExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -19,6 +20,13 @@ public class ErrorExceptionController {
     protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         final List<ErrorResponse.FieldError> fieldErrors = getFieldErrors(e.getBindingResult());
         return buildErrors(ErrorCode.INPUT_VALUE_INVALID,fieldErrors);
+    }
+
+    @ExceptionHandler(EmailExistException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleEmailExistException(EmailExistException e){
+        final ErrorCode emailExist=ErrorCode.EMAIL_ALREADY_EXIST;
+        return buildError(emailExist);
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {

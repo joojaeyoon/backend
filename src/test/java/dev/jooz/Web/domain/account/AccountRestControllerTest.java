@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,21 +26,23 @@ public class AccountRestControllerTest {
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private AccountService accountService;
 
     @Test
     @DisplayName("Account 생성 테스트")
     public void create_account() throws Exception {
-        AccountDto.CreateReq dto=AccountDto.CreateReq.builder()
+        AccountDto.CreateReq dto = AccountDto.CreateReq.builder()
                 .email("test@gmail.com")
                 .username("testUser")
                 .password("password")
                 .build();
-        AccountDto.AccountRes res=AccountDto.AccountRes.builder()
+        AccountDto.AccountRes res = AccountDto.AccountRes.builder()
                 .account(dto.toEntity())
                 .build();
 
-        String cont=objectMapper.writeValueAsString(dto);
-        String response=objectMapper.writeValueAsString(res);
+        String cont = objectMapper.writeValueAsString(dto);
+        String response = objectMapper.writeValueAsString(res);
 
 
         mvc.perform(post("/api/account")
@@ -50,24 +54,45 @@ public class AccountRestControllerTest {
     }
 
     @Test
-    public void create_invalid_account() throws Exception{
-        AccountDto.CreateReq dto=AccountDto.CreateReq.builder()
+    public void create_invalid_account() throws Exception {
+        AccountDto.CreateReq dto = AccountDto.CreateReq.builder()
                 .email("test@gmail.com")
                 .username("testUser")
                 .build();
-        AccountDto.AccountRes res=AccountDto.AccountRes.builder()
+        AccountDto.AccountRes res = AccountDto.AccountRes.builder()
                 .account(dto.toEntity())
                 .build();
 
-        String cont=objectMapper.writeValueAsString(dto);
-        String response=objectMapper.writeValueAsString(res);
+        String cont = objectMapper.writeValueAsString(dto);
+        String response = objectMapper.writeValueAsString(res);
 
         mvc.perform(post("/api/account")
                 .content(cont)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{code:'INP_001'}"))
+                .andDo(print());
     }
 
+    @Test
+    @DisplayName("중복 이메일로 계정 생성")
+    public void create_account_with_exist_email() throws Exception {
+        AccountDto.CreateReq dto=AccountDto.CreateReq.builder()
+                .email("test@test.com")
+                .username("testuser")
+                .password("password")
+                .build();
+        accountService.save(dto);
+
+        String cont=objectMapper.writeValueAsString(dto);
+
+        mvc.perform(post("/api/account")
+                .content(cont)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{code: 'AC_002'}"));
+    }
 
 }

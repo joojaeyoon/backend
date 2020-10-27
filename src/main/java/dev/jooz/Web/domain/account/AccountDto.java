@@ -5,13 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class AccountDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq{
+        @Email
         private String email;
+        @NotEmpty
         private String username;
+        @NotEmpty
         private String password;
 
         @Builder
