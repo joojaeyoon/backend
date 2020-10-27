@@ -49,4 +49,25 @@ public class AccountRestControllerTest {
                 .andExpect(content().string(response));
     }
 
+    @Test
+    public void create_invalid_account() throws Exception{
+        AccountDto.CreateReq dto=AccountDto.CreateReq.builder()
+                .email("test@gmail.com")
+                .username("testUser")
+                .build();
+        AccountDto.AccountRes res=AccountDto.AccountRes.builder()
+                .account(dto.toEntity())
+                .build();
+
+        String cont=objectMapper.writeValueAsString(dto);
+        String response=objectMapper.writeValueAsString(res);
+
+        mvc.perform(post("/api/account")
+                .content(cont)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
 }
