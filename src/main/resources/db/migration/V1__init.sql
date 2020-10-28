@@ -13,6 +13,7 @@ create table post(
     category VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
+    price int NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,
     primary key(id),

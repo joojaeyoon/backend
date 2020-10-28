@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -35,6 +36,13 @@ public class ErrorExceptionController {
     protected ErrorResponse handleUsernameExistException(UsernameExistsException e){
         final ErrorCode usernameExist=ErrorCode.USERNAME_ALREADY_EXIST;
         return buildError(usernameExist);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleNoSuchElementException(NoSuchElementException e){
+        final ErrorCode noSuchElement=ErrorCode.ACCOUNT_NOT_FOUND;
+        return buildError(noSuchElement);
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {

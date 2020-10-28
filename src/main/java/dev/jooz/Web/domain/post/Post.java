@@ -29,11 +29,15 @@ public class Post extends AuditorEntity {
     @Column(length=255,nullable = false)
     private String content;
 
+    @Column
+    private Long price;
+
     @Builder
-    public Post(Account account, String category, String title, String content){
+    public Post(Account account, String category, String title, String content,Long price){
         this.account=account;
         this.category=category;
         this.title=title;
         this.content=content;
+        this.price=price;
     }
 }
