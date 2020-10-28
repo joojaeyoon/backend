@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.account;
 
+import dev.jooz.Web.util.PasswordEncoding;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 public class AccountDto {
 
@@ -29,6 +29,8 @@ public class AccountDto {
         }
 
         public Account toEntity(){
+            PasswordEncoding passwordEncoding=new PasswordEncoding();
+            this.password=passwordEncoding.encode(this.password);
             return Account.builder()
                     .email(email)
                     .username(username)
