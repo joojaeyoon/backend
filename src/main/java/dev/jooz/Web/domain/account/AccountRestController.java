@@ -1,6 +1,7 @@
 package dev.jooz.Web.domain.account;
 
 import dev.jooz.Web.domain.account.exception.EmailExistException;
+import dev.jooz.Web.domain.account.exception.UsernameExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,19 @@ public class AccountRestController {
         if(accountService.existsByEmail(dto.getEmail())){
             throw new EmailExistException(dto.getEmail());
         }
+        if(accountService.existsByUsername(dto.getUsername())){
+            throw new UsernameExistsException(dto.getUsername());
+        }
         return new AccountDto.AccountRes(accountService.save(dto));
+    }
+
+    @PostMapping("/login")
+    @ResponseStatus(value = HttpStatus.OK)
+    public boolean loginAccount(@RequestBody @Valid final AccountDto.LoginReq dto){
+
+        if(accountService.loginAccount(dto))
+            return true;
+        return false;
     }
 
 

@@ -39,6 +39,8 @@ public class PostRepositoryTest {
 
         Post post = postList.get(0);
 
+        System.out.println(post.toString());
+
         assertEquals("cate", post.getCategory());
         assertEquals(account.getUsername(), post.getAccount().getUsername());
 

@@ -1,6 +1,7 @@
 package dev.jooz.Web.error;
 
 import dev.jooz.Web.domain.account.exception.EmailExistException;
+import dev.jooz.Web.domain.account.exception.UsernameExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,6 +28,13 @@ public class ErrorExceptionController {
     protected ErrorResponse handleEmailExistException(EmailExistException e){
         final ErrorCode emailExist=ErrorCode.EMAIL_ALREADY_EXIST;
         return buildError(emailExist);
+    }
+
+    @ExceptionHandler(UsernameExistsException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleUsernameExistException(UsernameExistsException e){
+        final ErrorCode usernameExist=ErrorCode.USERNAME_ALREADY_EXIST;
+        return buildError(usernameExist);
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {

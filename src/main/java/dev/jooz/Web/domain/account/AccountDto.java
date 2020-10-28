@@ -40,6 +40,21 @@ public class AccountDto {
     }
 
     @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class LoginReq{
+        @NotEmpty
+        private String username;
+        @NotEmpty
+        private String password;
+
+        @Builder
+        public LoginReq(String username,String password){
+            this.username=username;
+            this.password=password;
+        }
+    }
+
+    @Getter
     public static class AccountRes{
         private String email;
         private String username;
