@@ -100,5 +100,4 @@ public class PostRestControllerTest {
                 .andExpect(jsonPath("$.content",hasSize(5)))
                 .andDo(print());
     }
-    // TODO 테스트때 DB 따로 쓰는거 배우기. 그리고 위 테스트 해결하기.
 }
