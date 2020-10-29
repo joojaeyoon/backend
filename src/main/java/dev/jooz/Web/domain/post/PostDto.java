@@ -55,7 +55,7 @@ public class PostDto {
         public PostRes(Post post){
             this.id=post.getId();
             this.title=post.getTitle();
-            this.created_at=post.getCreated_at();
+            this.created_at=post.getCreatedAt();
             this.category=post.getCategory();
         }
 

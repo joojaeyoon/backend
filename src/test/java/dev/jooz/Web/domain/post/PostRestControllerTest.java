@@ -1,31 +1,47 @@
 package dev.jooz.Web.domain.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import javax.transaction.Transactional;
-
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PostRestControllerTest {
     @Autowired
-    private PostService postService;
+    private PostRepository postRepository;
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
+
+    @BeforeAll
+    public void setUp() {
+        for (int i = 0; i < 5; i++) {
+            postRepository.save(PostDto.CreateReq.builder()
+                    .title("test")
+                    .category("test")
+                    .content("test")
+                    .price(Long.valueOf(10000))
+                    .build().toEntity());
+        }
+    }
 
     @Test
     @DisplayName("포스트 생성 테스트")
@@ -68,5 +84,21 @@ public class PostRestControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("포스트 리스트 받아오기")
+    public void get_post_list() throws Exception {
+        MultiValueMap<String,String> param=new LinkedMultiValueMap<>();
+        param.add("page","1");
+        param.add("size","5");
+        param.add("direction","DESC");
 
+        mvc.perform(get("/api/post")
+                .params(param)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content",hasSize(5)))
+                .andDo(print());
+    }
+    // TODO 테스트때 DB 따로 쓰는거 배우기. 그리고 위 테스트 해결하기.
 }

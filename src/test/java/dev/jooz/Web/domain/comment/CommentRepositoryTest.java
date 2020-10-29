@@ -88,7 +88,7 @@ public class CommentRepositoryTest {
                 .findById(comment.getId());
         comment=commentOptional.get();
 
-        assertEquals(comment.getCreated_at().isAfter(now),true);
+        assertEquals(comment.getCreatedAt().isAfter(now),true);
 
     }
 }
