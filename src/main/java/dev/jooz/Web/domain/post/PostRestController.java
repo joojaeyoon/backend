@@ -22,8 +22,13 @@ public class PostRestController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    @Transactional(readOnly = true)
     public Page<PostDto.PostRes> getPostList(final PageRequest pageable){
         return postService.findAll(pageable.of()).map(PostDto.PostRes::new);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public PostDto.PostRes updatePost(@PathVariable("id") Long id,@RequestBody @Valid final PostDto.UpdateReq dto){
+        return postService.update(id,dto);
     }
 }

@@ -1,9 +1,6 @@
 package dev.jooz.Web.domain.post;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -42,6 +39,27 @@ public class PostDto {
                     .price(price)
                     .build();
         }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UpdateReq{
+        private String category;
+
+        private String title;
+
+        private String content;
+
+        private Long price;
+
+        @Builder
+        public UpdateReq(String category, String title, String content,Long price){
+            this.category=category;
+            this.title=title;
+            this.content=content;
+            this.price=price;
+        }
+
     }
 
 

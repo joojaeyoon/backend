@@ -13,8 +13,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -87,17 +87,38 @@ public class PostRestControllerTest {
     @Test
     @DisplayName("포스트 리스트 받아오기")
     public void get_post_list() throws Exception {
-        MultiValueMap<String,String> param=new LinkedMultiValueMap<>();
-        param.add("page","1");
-        param.add("size","5");
-        param.add("direction","DESC");
+        MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
+        param.add("page", "1");
+        param.add("size", "5");
+        param.add("direction", "DESC");
 
         mvc.perform(get("/api/post")
                 .params(param)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content",hasSize(5)))
+                .andExpect(jsonPath("$.content", hasSize(5)))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("포스트 수정하기")
+    public void update_post() throws Exception {
+        PostDto.UpdateReq dto = PostDto.UpdateReq.builder()
+                .category("Update Category")
+                .price(Long.valueOf(100000))
+                .title("Title Updated!")
+                .build();
+
+        String cont = objectMapper.writeValueAsString(dto);
+
+        mvc.perform(put("/api/post/1")
+                .content(cont)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title",is("Title Updated!")))
+                .andDo(print());
+
     }
 }

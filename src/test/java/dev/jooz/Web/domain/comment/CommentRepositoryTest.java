@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CommentRepositoryTest {
     @Autowired
@@ -49,11 +51,6 @@ public class CommentRepositoryTest {
                 .build();
         accountRepository.save(account);
         postRepository.save(post);
-    }
-
-    @AfterAll
-    public void cleanUp(){
-        accountRepository.deleteAll();
     }
 
     @Test

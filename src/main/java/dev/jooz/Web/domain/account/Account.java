@@ -25,8 +25,6 @@ public class Account {
     @Column
     private String password;
 
-    // TODO Password Encryption
-
     @Builder
     public Account(String email, String username, String password){
         this.email=email;
