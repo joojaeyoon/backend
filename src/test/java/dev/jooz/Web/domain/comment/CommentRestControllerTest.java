@@ -65,7 +65,7 @@ public class CommentRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(cont)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.content", is("Create Comment")))
                 .andDo(print());
     }
@@ -116,7 +116,7 @@ public class CommentRestControllerTest {
         mvc.perform(get(url)
         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content",hasSize(10)))
+                .andExpect(jsonPath("$",hasSize(10)))
                 .andDo(print());
     }
 }
