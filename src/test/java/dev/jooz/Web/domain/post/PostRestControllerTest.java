@@ -102,7 +102,7 @@ public class PostRestControllerTest {
     }
 
     @Test
-    @DisplayName("포스트 수정하기")
+    @DisplayName("포스트 수정 테스트")
     public void update_post() throws Exception {
         PostDto.UpdateReq dto = PostDto.UpdateReq.builder()
                 .category("Update Category")
@@ -117,8 +117,45 @@ public class PostRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title",is("Title Updated!")))
+                .andExpect(jsonPath("$.title", is("Title Updated!")))
                 .andDo(print());
+    }
 
+    @Test
+    @DisplayName("존재하지 않는 포스트 수정 테스트")
+    public void update_not_exist_post() throws Exception {
+        PostDto.UpdateReq dto = PostDto.UpdateReq.builder()
+                .category("Update Category")
+                .price(Long.valueOf(100000))
+                .title("Title Updated!")
+                .build();
+
+        String cont = objectMapper.writeValueAsString(dto);
+
+        mvc.perform(put("/api/post/300")
+                .content(cont)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("포스트 삭제 테스트")
+    public void delete_post() throws Exception {
+        mvc.perform(delete("/api/post/2")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 포스트 삭제 테스트")
+    public void delete_not_exist_post() throws Exception {
+        mvc.perform(delete("/api/post/103020")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andDo(print());
     }
 }

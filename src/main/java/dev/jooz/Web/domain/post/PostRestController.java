@@ -31,4 +31,10 @@ public class PostRestController {
     public PostDto.PostRes updatePost(@PathVariable("id") Long id,@RequestBody @Valid final PostDto.UpdateReq dto){
         return postService.update(id,dto);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String deletePost(@PathVariable Long id){
+        return postService.delete(id);
+    }
 }

@@ -39,9 +39,9 @@ public class ErrorExceptionController {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     protected ErrorResponse handleNoSuchElementException(NoSuchElementException e){
-        final ErrorCode noSuchElement=ErrorCode.ACCOUNT_NOT_FOUND;
+        final ErrorCode noSuchElement=ErrorCode.ENTITY_NOT_FOUND;
         return buildError(noSuchElement);
     }
 

@@ -29,13 +29,18 @@ public class PostService {
         optionalPost.orElseThrow(()-> new NoSuchElementException());
         Post post=optionalPost.get();
 
-        System.out.println(post);
         post.updatePost(dto);
 
-        System.out.println("---------------------------------------");
-        System.out.println(post);
-        System.out.println("---------------------------------------");
-
         return new PostDto.PostRes(post);
+    }
+
+    public String delete(Long id){
+        Optional<Post> optionalPost=postRepository.findById(id);
+        optionalPost.orElseThrow(()-> new NoSuchElementException());
+        Post post=optionalPost.get();
+
+        postRepository.delete(post);
+
+        return "deleted";
     }
 }
