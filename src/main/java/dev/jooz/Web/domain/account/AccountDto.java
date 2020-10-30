@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class AccountDto {
 
@@ -15,6 +16,7 @@ public class AccountDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq{
         @Email
+        @NotEmpty
         private String email;
         @NotEmpty
         private String username;

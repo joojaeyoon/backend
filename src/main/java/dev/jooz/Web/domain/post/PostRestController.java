@@ -3,7 +3,7 @@ package dev.jooz.Web.domain.post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,8 +33,10 @@ public class PostRestController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
-    public String deletePost(@PathVariable Long id){
-        return postService.delete(id);
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public ResponseEntity deletePost(@PathVariable Long id){
+        postService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

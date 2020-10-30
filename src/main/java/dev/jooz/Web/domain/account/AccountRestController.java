@@ -17,7 +17,6 @@ public class AccountRestController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public AccountDto.AccountRes createAccount(@RequestBody @Valid final AccountDto.CreateReq dto){
-
         if(accountService.existsByEmail(dto.getEmail())){
             throw new EmailExistException(dto.getEmail());
         }
@@ -35,6 +34,4 @@ public class AccountRestController {
             return true;
         return false;
     }
-
-
 }

@@ -80,7 +80,7 @@ public class PostRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{'code': 'INP_001'}"))
+                .andExpect(content().json("{'code': 'ERR_004'}"))
                 .andDo(print());
     }
 
@@ -146,7 +146,7 @@ public class PostRestControllerTest {
     public void delete_post() throws Exception {
         mvc.perform(delete("/api/post/2")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 

@@ -69,13 +69,14 @@ public class PostDto {
         private String category;
         private String title;
         private LocalDateTime created_at;
+        private LocalDateTime updated_at;
 
         public PostRes(Post post){
             this.id=post.getId();
             this.title=post.getTitle();
             this.created_at=post.getCreatedAt();
+            this.updated_at=post.getUpdatedAt();
             this.category=post.getCategory();
         }
-
     }
 }

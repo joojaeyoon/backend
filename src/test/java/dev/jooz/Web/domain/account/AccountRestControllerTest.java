@@ -36,20 +36,15 @@ public class AccountRestControllerTest {
                 .username("testUser")
                 .password("password")
                 .build();
-        AccountDto.AccountRes res = AccountDto.AccountRes.builder()
-                .account(dto.toEntity())
-                .build();
 
         String cont = objectMapper.writeValueAsString(dto);
-        String response = objectMapper.writeValueAsString(res);
-
 
         mvc.perform(post("/api/account")
                 .content(cont)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(response));
+                .andDo(print());
     }
 
     @Test
@@ -59,19 +54,14 @@ public class AccountRestControllerTest {
                 .email("test@gmail.com")
                 .username("testuser")
                 .build();
-        AccountDto.AccountRes res = AccountDto.AccountRes.builder()
-                .account(dto.toEntity())
-                .build();
-
         String cont = objectMapper.writeValueAsString(dto);
-        String response = objectMapper.writeValueAsString(res);
 
         mvc.perform(post("/api/account")
                 .content(cont)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{code:'INP_001'}"))
+                .andExpect(content().json("{code:'ERR_004'}"))
                 .andDo(print());
     }
 
@@ -92,6 +82,6 @@ public class AccountRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{code: 'AC_002'}"));
+                .andExpect(content().json("{code: 'ERR_002'}"));
     }
 }

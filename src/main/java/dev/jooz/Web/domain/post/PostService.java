@@ -34,13 +34,11 @@ public class PostService {
         return new PostDto.PostRes(post);
     }
 
-    public String delete(Long id){
+    public void delete(Long id){
         Optional<Post> optionalPost=postRepository.findById(id);
         optionalPost.orElseThrow(()-> new NoSuchElementException());
         Post post=optionalPost.get();
 
         postRepository.delete(post);
-
-        return "deleted";
     }
 }
