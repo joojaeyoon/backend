@@ -16,8 +16,17 @@ create table post(
     price int NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,
+    completed boolean,
     primary key(id),
     foreign key(account_id) references account(id) on delete CASCADE
+);
+
+create table post_img(
+    id int AUTO_INCREMENT,
+    url VARCHAR(255),
+    post_id int,
+    primary key(id),
+    foreign key(post_id) references post(id) on delete CASCADE
 );
 
 create table comment(
