@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.post;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import dev.jooz.Web.domain.image.ImageDto;
 import lombok.*;
 
@@ -67,14 +68,15 @@ public class PostDto {
 
     }
 
-
     @Getter
     public static class PostRes{
         private Long id;
         private String category;
         private String title;
         private Long price;
+        @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd'T'HH:mm:ss",timezone = "Asia/Seoul")
         private LocalDateTime created_at;
+        @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd'T'HH:mm:ss",timezone = "Asia/Seoul")
         private LocalDateTime updated_at;
 
         public PostRes(Post post){
@@ -84,6 +86,18 @@ public class PostDto {
             this.created_at=post.getCreatedAt();
             this.updated_at=post.getUpdatedAt();
             this.category=post.getCategory();
+        }
+    }
+
+    @Getter
+    public static class PostDetailRes extends PostRes{
+        private String content;
+        List<ImageDto.ImageCreateDto> images;
+
+        public PostDetailRes(Post post, List<ImageDto.ImageCreateDto> images){
+            super(post);
+            this.content=post.getContent();
+            this.images=images;
         }
     }
 }
