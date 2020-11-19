@@ -15,7 +15,7 @@ public class ImageRestController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public List<ImageDto.ImageCreateResDto> uploadImage(@RequestParam MultipartFile[] files) throws Exception {
+    public List<ImageDto.ImageCreateDto> uploadImage(@RequestParam MultipartFile[] files) throws Exception {
 
         return imageService.saveImages(files);
     }

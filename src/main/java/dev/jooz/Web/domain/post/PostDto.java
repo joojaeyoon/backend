@@ -1,10 +1,12 @@
 package dev.jooz.Web.domain.post;
 
+import dev.jooz.Web.domain.image.ImageDto;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PostDto {
 
@@ -24,12 +26,15 @@ public class PostDto {
         @NotNull
         private Long price;
 
+        private List<ImageDto.ImageCreateDto> images;
+
         @Builder
-        public CreateReq(String category,String title,String content,Long price){
+        public CreateReq(String category,String title,String content,Long price,List<ImageDto.ImageCreateDto> images){
             this.category=category;
             this.title=title;
             this.content=content;
             this.price=price;
+            this.images=images;
         }
         public Post toEntity(){
             return Post.builder()

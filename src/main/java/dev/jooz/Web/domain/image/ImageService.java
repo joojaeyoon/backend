@@ -3,6 +3,7 @@ package dev.jooz.Web.domain.image;
 import dev.jooz.Web.domain.image.exception.NoFileUploadException;
 import dev.jooz.Web.domain.image.exception.NoImageException;
 import dev.jooz.Web.domain.image.exception.TooManyImageException;
+import dev.jooz.Web.domain.post.Post;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +53,8 @@ public class ImageService {
         return name;
     }
 
-    public List<ImageDto.ImageCreateResDto> saveImages(MultipartFile[] files) throws Exception{
-        List<ImageDto.ImageCreateResDto> resDtos=new ArrayList<>();
+    public List<ImageDto.ImageCreateDto> saveImages(MultipartFile[] files) throws Exception{
+        List<ImageDto.ImageCreateDto> resDtos=new ArrayList<>();
 
         logger.info("File Length = "+files.length);
 
@@ -75,9 +76,16 @@ public class ImageService {
 
         for(int i=0;i<files.length;i++){
             String name=write(files[i]);
-            resDtos.add(new ImageDto.ImageCreateResDto(name));
+            resDtos.add(new ImageDto.ImageCreateDto(name));
         }
 
         return resDtos;
+    }
+
+    public void save(List<ImageDto.ImageCreateDto> dtos, Post post){
+        logger.info(dtos.stream().toArray().toString());
+        for(int i=0;i<dtos.size();i++){
+            imageRepository.save(dtos.get(i).toEntity(post));
+        }
     }
 }

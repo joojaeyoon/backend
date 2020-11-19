@@ -1,6 +1,7 @@
 package dev.jooz.Web.domain.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.jooz.Web.domain.image.ImageDto;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,6 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -46,11 +50,19 @@ public class PostRestControllerTest {
     @Test
     @DisplayName("포스트 생성 테스트")
     public void create_post() throws Exception {
+        List<ImageDto.ImageCreateDto> imgDto = new ArrayList<>();
+
+        imgDto.add(ImageDto.ImageCreateDto.builder()
+                .name("test.png").build());
+        imgDto.add(ImageDto.ImageCreateDto.builder()
+                .name("test.png").build());
+
         PostDto.CreateReq dto = PostDto.CreateReq.builder()
                 .category("test category")
                 .content("test content")
                 .price(Long.valueOf(35000))
                 .title("test title")
+                .images(imgDto)
                 .build();
 
         String cont = objectMapper.writeValueAsString(dto);
