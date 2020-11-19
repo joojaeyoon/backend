@@ -32,7 +32,11 @@ public class PostRestController {
         return postDetailRes;
     }
 
-    // TODO Create Post Detail REST include img url
+    @GetMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public PostDto.PostDetailRes getPost(@PathVariable("id") Long id){
+        return postService.findById(id);
+    }
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)

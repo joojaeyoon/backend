@@ -37,12 +37,19 @@ public class PostRestControllerTest {
 
     @BeforeAll
     public void setUp() {
+        List<ImageDto.ImageCreateDto> imgDto = new ArrayList<>();
+
+        imgDto.add(ImageDto.ImageCreateDto.builder()
+                .name("test.png").build());
+        imgDto.add(ImageDto.ImageCreateDto.builder()
+                .name("test.png").build());
         for (int i = 0; i < 5; i++) {
             postRepository.save(PostDto.CreateReq.builder()
                     .title("test")
                     .category("test")
                     .content("test")
                     .price(Long.valueOf(10000))
+                    .images(imgDto)
                     .build().toEntity());
         }
     }
@@ -73,7 +80,7 @@ public class PostRestControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{'title':'test title'}"))
-                .andExpect(jsonPath("$.images",hasSize(2)))
+                .andExpect(jsonPath("$.images", hasSize(2)))
                 .andDo(print());
     }
 
@@ -169,6 +176,16 @@ public class PostRestControllerTest {
         mvc.perform(delete("/api/post/103020")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("포스트 디테일 get 테스트")
+    public void get_post_detail() throws Exception {
+        mvc.perform(get("/api/post/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.images").exists())
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

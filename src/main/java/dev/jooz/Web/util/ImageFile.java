@@ -1,5 +1,6 @@
 package dev.jooz.Web.util;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,8 +11,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@Component
 public class ImageFile {
-    private final String[] imgExt= {"png","jpg","jpeg"};
+    private final String[] imgExt;
+
+    public ImageFile(){
+        imgExt=new String[]{"png","jpg","jpeg"};
+    }
 
     public boolean checkExt(String ext){
         for(String e : imgExt) {

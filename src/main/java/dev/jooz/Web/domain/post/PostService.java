@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.post;
 
+import dev.jooz.Web.domain.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final ImageService imageService;
 
     public Post save(PostDto.CreateReq dto){
         return postRepository.save(dto.toEntity());
@@ -22,6 +24,16 @@ public class PostService {
     @Transactional(readOnly = true)
     public Page<Post> findAll(Pageable pageable){
         return postRepository.findAll(pageable);
+    }
+
+    public PostDto.PostDetailRes findById(Long id){
+        Optional<Post> post=postRepository.findById(id);
+
+        post.orElseThrow(()-> new NoSuchElementException());
+
+        PostDto.PostDetailRes postDetailRes=new PostDto.PostDetailRes(post.get(),imageService.findByPost(post.get()));
+
+        return postDetailRes;
     }
 
     public PostDto.PostRes update(Long id,PostDto.UpdateReq dto){

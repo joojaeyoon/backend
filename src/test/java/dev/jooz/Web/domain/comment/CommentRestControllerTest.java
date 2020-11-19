@@ -24,13 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CommentRestControllerTest {
     @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
     @Autowired
-    PostRepository postRepository;
+    private PostRepository postRepository;
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
+
+    private Long id;
 
     @BeforeAll
     public void setUp() {
@@ -40,6 +42,8 @@ public class CommentRestControllerTest {
                 .title("title")
                 .price(Long.valueOf(100000))
                 .build());
+        id=post.getId();
+
         for (int i = 0; i < 10; i++) {
             commentRepository.save(Comment.builder()
                     .post(post)
@@ -108,7 +112,7 @@ public class CommentRestControllerTest {
     @Test
     @DisplayName("댓글 리스트 조회 테스트")
     public void get_comment_list() throws Exception{
-        String url="/api/post/1/comment";
+        String url="/api/post/"+id+"/comment";
 
         mvc.perform(get(url)
         .accept(MediaType.APPLICATION_JSON))
