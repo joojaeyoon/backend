@@ -2,6 +2,9 @@ package dev.jooz.Web.error;
 
 import dev.jooz.Web.domain.account.exception.EmailExistException;
 import dev.jooz.Web.domain.account.exception.UsernameExistsException;
+import dev.jooz.Web.domain.image.exception.NoFileUploadException;
+import dev.jooz.Web.domain.image.exception.NoImageException;
+import dev.jooz.Web.domain.image.exception.TooManyImageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -43,6 +46,27 @@ public class ErrorExceptionController {
     protected ErrorResponse handleNoSuchElementException(NoSuchElementException e){
         final ErrorCode noSuchElement=ErrorCode.ENTITY_NOT_FOUND;
         return buildError(noSuchElement);
+    }
+
+    @ExceptionHandler(NoImageException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleNoImageException(NoImageException e){
+        final ErrorCode noImage=ErrorCode.NO_IMAGE;
+        return buildError(noImage);
+    }
+
+    @ExceptionHandler(NoFileUploadException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleNoFileUploadException(NoFileUploadException e){
+        final ErrorCode noFile=ErrorCode.NO_FILE_UPLOAD;
+        return buildError(noFile);
+    }
+
+    @ExceptionHandler(TooManyImageException.class)
+    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleTooManyImageException(TooManyImageException e){
+        final ErrorCode tooMany=ErrorCode.TOO_MANY_IMAGE;
+        return buildError(tooMany);
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {
