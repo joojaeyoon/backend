@@ -46,7 +46,10 @@ public class PostRestController {
 
     @GetMapping("/{postId}/comment")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<CommentDto.CommentRes> getCommentList(@PathVariable Long postId){
+    public List<CommentDto.CommentRes> getCommentList(@PathVariable Long postId) {
         return commentService.findAll(postId);
     }
+
+    // TODO Post Img Upload Controller
+
 }

@@ -24,7 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/css/**",
                         "/images/**",
                         "/js/**",
-                        "/console/**")
+                        "/console/**",
+                        "/static/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
