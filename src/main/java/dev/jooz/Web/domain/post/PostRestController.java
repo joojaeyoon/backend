@@ -2,11 +2,8 @@ package dev.jooz.Web.domain.post;
 
 import dev.jooz.Web.domain.comment.CommentDto;
 import dev.jooz.Web.domain.comment.CommentService;
-import dev.jooz.Web.domain.image.ImageDto;
 import dev.jooz.Web.domain.image.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +20,16 @@ public class PostRestController {
     private final ImageService imageService;
     private final CommentService commentService;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public PostDto.PostRes createPost(@RequestBody @Valid final PostDto.CreateReq dto) {
+    public PostDto.PostDetailRes createPost(@RequestBody @Valid final PostDto.CreateReq dto) {
         Post post = postService.save(dto);
-        PostDto.PostRes postRes = new PostDto.PostRes(post);
-
         if (dto.getImages()!=null)
             imageService.save(dto.getImages(), post);
 
-        return postRes;
+        PostDto.PostDetailRes postDetailRes = new PostDto.PostDetailRes(post, dto.getImages());
+
+        return postDetailRes;
     }
 
     // TODO Create Post Detail REST include img url

@@ -73,6 +73,7 @@ public class PostRestControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{'title':'test title'}"))
+                .andExpect(jsonPath("$.images",hasSize(2)))
                 .andDo(print());
     }
 
