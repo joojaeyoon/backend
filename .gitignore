@@ -35,3 +35,6 @@ out/
 application-dev.yml
 
 mysql/
+
+### static files ###
+src/main/resources/static/*
