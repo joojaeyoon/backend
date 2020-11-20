@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,7 @@ import java.util.List;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final ImageFile imageFile;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private String path="src/main/resources/static/images/";
 
     public List<ImageDto.ImageCreateDto> findByPost(Post post) {
         List<ImageDto.ImageCreateDto> images=new ArrayList<>();
@@ -35,18 +35,13 @@ public class ImageService {
     public List<ImageDto.ImageCreateDto> saveImages(MultipartFile[] files) throws Exception {
         List<ImageDto.ImageCreateDto> resDtos = new ArrayList<>();
 
-        logger.info("File Length = " + files.length);
-
         if (files.length > 5)
             throw new TooManyImageException();
         else if (files.length == 0)
             throw new NoFileUploadException();
 
         for (MultipartFile file : files) {
-            String[] nameSplit = file.getOriginalFilename().split("\\.");
-            String ext = nameSplit[nameSplit.length - 1];
-
-            logger.info("ext = " + ext);
+            String ext=file.getContentType().split("/")[1];
 
             if (!imageFile.checkExt(ext)) {
                 throw new NoImageException(ext);
@@ -63,7 +58,13 @@ public class ImageService {
 
     public void save(List<ImageDto.ImageCreateDto> dtos, Post post) {
         for (int i = 0; i < dtos.size(); i++) {
+            String name=dtos.get(i).getName();
             imageRepository.save(dtos.get(i).toEntity(post));
+            File img=new File(path+name);
+            File to=new File(path+post.getId()+"/"+name);
+
+            img.renameTo(to);
+
         }
     }
 }

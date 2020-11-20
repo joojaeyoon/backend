@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -19,11 +20,15 @@ public class PostRestController {
     private final PostService postService;
     private final ImageService imageService;
     private final CommentService commentService;
+    private String path="src/main/resources/static/images/";
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public PostDto.PostDetailRes createPost(@RequestBody @Valid final PostDto.CreateReq dto) {
         Post post = postService.save(dto);
+        File dir=new File(path+post.getId());
+        dir.mkdir();
+
         if (dto.getImages()!=null)
             imageService.save(dto.getImages(), post);
 
