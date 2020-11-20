@@ -1,7 +1,7 @@
 package dev.jooz.Web.domain.account;
 
-import dev.jooz.Web.domain.account.exception.EmailExistException;
-import dev.jooz.Web.domain.account.exception.UsernameExistsException;
+import dev.jooz.Web.exception.account.EmailExistException;
+import dev.jooz.Web.exception.account.UsernameExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

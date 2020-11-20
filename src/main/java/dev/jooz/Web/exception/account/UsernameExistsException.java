@@ -1,4 +1,4 @@
-package dev.jooz.Web.domain.account.exception;
+package dev.jooz.Web.exception.account;
 
 import lombok.Getter;
 

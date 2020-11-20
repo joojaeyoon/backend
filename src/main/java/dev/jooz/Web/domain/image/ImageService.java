@@ -1,13 +1,11 @@
 package dev.jooz.Web.domain.image;
 
-import dev.jooz.Web.domain.image.exception.NoFileUploadException;
-import dev.jooz.Web.domain.image.exception.NoImageException;
-import dev.jooz.Web.domain.image.exception.TooManyImageException;
+import dev.jooz.Web.exception.image.NoFileUploadException;
+import dev.jooz.Web.exception.image.NoImageException;
+import dev.jooz.Web.exception.image.TooManyImageException;
 import dev.jooz.Web.domain.post.Post;
 import dev.jooz.Web.util.ImageFile;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

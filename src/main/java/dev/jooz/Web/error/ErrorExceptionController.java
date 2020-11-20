@@ -1,10 +1,10 @@
 package dev.jooz.Web.error;
 
-import dev.jooz.Web.domain.account.exception.EmailExistException;
-import dev.jooz.Web.domain.account.exception.UsernameExistsException;
-import dev.jooz.Web.domain.image.exception.NoFileUploadException;
-import dev.jooz.Web.domain.image.exception.NoImageException;
-import dev.jooz.Web.domain.image.exception.TooManyImageException;
+import dev.jooz.Web.exception.account.EmailExistException;
+import dev.jooz.Web.exception.account.UsernameExistsException;
+import dev.jooz.Web.exception.image.NoFileUploadException;
+import dev.jooz.Web.exception.image.NoImageException;
+import dev.jooz.Web.exception.image.TooManyImageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

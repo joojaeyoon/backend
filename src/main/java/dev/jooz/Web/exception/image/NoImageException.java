@@ -1,4 +1,4 @@
-package dev.jooz.Web.domain.image.exception;
+package dev.jooz.Web.exception.image;
 
 import lombok.Getter;
 
