@@ -46,7 +46,7 @@ public class PostRestController {
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public Page<PostDto.PostRes> getPostList(final PageRequest pageable) {
-        return postService.findAll(pageable.of()).map(PostDto.PostRes::new);
+        return postService.findAll(pageable.of());
     }
 
     @PutMapping("/{id}")

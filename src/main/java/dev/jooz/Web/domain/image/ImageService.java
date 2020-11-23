@@ -22,9 +22,16 @@ public class ImageService {
     private final ImageFile imageFile;
     private String path="src/main/resources/static/images/";
 
-    public List<ImageDto.ImageCreateDto> findByPost(Post post) {
+    public ImageDto.ImageCreateDto findByPost(Post post){
+        Image image=imageRepository.findByPost(post);
+        if(image==null)
+            return null;
+        return new ImageDto.ImageCreateDto(imageRepository.findByPost(post));
+    }
+
+    public List<ImageDto.ImageCreateDto> findAllByPost(Post post) {
         List<ImageDto.ImageCreateDto> images=new ArrayList<>();
-        for(Image img:imageRepository.findByPost(post))
+        for(Image img:imageRepository.findAllByPost(post))
            images.add(new ImageDto.ImageCreateDto(img.getUrl()));
 
         return images;

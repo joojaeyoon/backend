@@ -79,6 +79,8 @@ public class PostDto {
         @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd'T'HH:mm:ss",timezone = "Asia/Seoul")
         private LocalDateTime updated_at;
 
+        private ImageDto.ImageCreateDto image;
+
         public PostRes(Post post){
             this.id=post.getId();
             this.title=post.getTitle();
@@ -86,6 +88,10 @@ public class PostDto {
             this.created_at=post.getCreatedAt();
             this.updated_at=post.getUpdatedAt();
             this.category=post.getCategory();
+        }
+        public PostRes(Post post, ImageDto.ImageCreateDto image){
+            this(post);
+            this.image=image;
         }
     }
 

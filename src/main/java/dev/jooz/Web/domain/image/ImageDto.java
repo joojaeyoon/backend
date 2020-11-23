@@ -20,6 +20,10 @@ public class ImageDto {
             this.name=name;
         }
 
+        public ImageCreateDto(Image image){
+            this.name=image.getUrl();
+        }
+
         public Image toEntity(Post post){
             return Image.builder()
                     .post(post)
