@@ -1,9 +1,11 @@
 
 create table account(
     id int AUTO_INCREMENT,
-    email varchar(255) UNIQUE NOT NULL,
     username varchar(255) UNIQUE NOT NULL,
     password varchar(255) NOT NULL,
+    role varchar(32) NOT NULL,
+    created_at DATETIME,
+    updated_at DATETIME,
     primary key (id)
 );
 
