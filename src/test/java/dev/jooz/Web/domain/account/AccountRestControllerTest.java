@@ -36,7 +36,6 @@ public class AccountRestControllerTest {
     @DisplayName("Account 생성 테스트")
     public void create_account() throws Exception {
         AccountDto.CreateReq dto = AccountDto.CreateReq.builder()
-                .email("test@gmail.com")
                 .username("testUser0")
                 .password("password")
                 .build();
@@ -55,7 +54,6 @@ public class AccountRestControllerTest {
     @DisplayName("유효하지않은 데이터 형식")
     public void create_invalid_account() throws Exception {
         AccountDto.CreateReq dto = AccountDto.CreateReq.builder()
-                .email("test1@gmail.com")
                 .username("testuser1")
                 .build();
         String cont = objectMapper.writeValueAsString(dto);
@@ -66,27 +64,6 @@ public class AccountRestControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("{code:'ERR_004'}"))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("중복 이메일로 계정 생성")
-    public void create_account_with_exist_email() throws Exception {
-        AccountDto.CreateReq dto=AccountDto.CreateReq.builder()
-                .email("test2@test.com")
-                .username("testUser2")
-                .password("password")
-                .build();
-        accountService.save(dto);
-
-        String cont=objectMapper.writeValueAsString(dto);
-
-        mvc.perform(post("/api/account")
-                .content(cont)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().json("{code: 'ERR_002'}"))
                 .andDo(print());
     }
 }

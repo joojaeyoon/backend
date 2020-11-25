@@ -1,42 +1,36 @@
 package dev.jooz.Web.domain.account;
 
-import dev.jooz.Web.util.PasswordEncoding;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.validation.constraints.Email;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 public class AccountDto {
 
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq{
-        @Email
-        @NotEmpty
-        private String email;
         @NotEmpty
         private String username;
         @NotEmpty
         private String password;
+        @Enumerated(EnumType.STRING)
+        private AccountRole role;
 
         @Builder
-        public CreateReq(String email, String username, String password){
-            this.email=email;
+        public CreateReq(String username, String password,AccountRole role){
             this.username=username;
             this.password=password;
+            this.role=role;
         }
 
         public Account toEntity(){
-            PasswordEncoding passwordEncoding=new PasswordEncoding();
-            this.password=passwordEncoding.encode(this.password);
             return Account.builder()
-                    .email(email)
                     .username(username)
                     .password(password)
+                    .role(role)
                     .build();
         }
     }
@@ -58,13 +52,15 @@ public class AccountDto {
 
     @Getter
     public static class AccountRes{
-        private String email;
         private String username;
+        private String accessToken;
+        private String refreshToken;
 
         @Builder
-        public AccountRes(Account account){
-            this.email=account.getEmail();
-            this.username=account.getUsername();
+        public AccountRes(String username,String accessToken,String refreshToken){
+            this.username=username;
+            this.accessToken=accessToken;
+            this.refreshToken=refreshToken;
         }
     }
 }
