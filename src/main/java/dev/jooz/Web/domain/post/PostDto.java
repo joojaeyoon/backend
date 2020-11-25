@@ -74,9 +74,9 @@ public class PostDto {
         private String category;
         private String title;
         private Long price;
-        @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd'T'HH:mm:ss",timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime created_at;
-        @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-mm-dd'T'HH:mm:ss",timezone = "Asia/Seoul")
+        @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
         private LocalDateTime updated_at;
 
         private ImageDto.ImageCreateDto image;

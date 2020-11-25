@@ -110,7 +110,7 @@ public class PostRestControllerTest {
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("page", "1");
         param.add("size", "5");
-        param.add("direction", "DESC");
+        param.add("direction", "ASC");
 
         mvc.perform(get("/api/post")
                 .params(param)
