@@ -1,6 +1,9 @@
 package dev.jooz.Web.domain.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.jooz.Web.domain.account.AccountDto;
+import dev.jooz.Web.domain.account.AccountRole;
+import dev.jooz.Web.domain.account.AccountService;
 import dev.jooz.Web.domain.image.ImageDto;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +34,32 @@ public class PostRestControllerTest {
     @Autowired
     private PostRepository postRepository;
     @Autowired
+    private AccountService accountService;
+    @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
 
+    private String accessToken;
+
     @BeforeAll
     public void setUp() {
+        AccountDto.CreateReq accountDto= AccountDto.CreateReq.builder()
+                .username("testuser001")
+                .password("password")
+                .role(AccountRole.ROLE_USER)
+                .build();
+        AccountDto.AccountRes accountRes=accountService.save(accountDto);
+
+        accessToken=accountRes.getAccessToken();
+
         List<ImageDto.ImageCreateDto> imgDto = new ArrayList<>();
 
         imgDto.add(ImageDto.ImageCreateDto.builder()
                 .name("test.png").build());
         imgDto.add(ImageDto.ImageCreateDto.builder()
                 .name("test.png").build());
+
         for (int i = 0; i < 5; i++) {
             postRepository.save(PostDto.CreateReq.builder()
                     .title("test")
@@ -76,6 +93,7 @@ public class PostRestControllerTest {
 
         mvc.perform(post("/api/post")
                 .content(cont)
+                .header("X-AUTH-TOKEN",accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())

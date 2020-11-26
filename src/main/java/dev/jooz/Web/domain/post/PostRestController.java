@@ -2,7 +2,6 @@ package dev.jooz.Web.domain.post;
 
 import dev.jooz.Web.domain.comment.CommentDto;
 import dev.jooz.Web.domain.comment.CommentService;
-import dev.jooz.Web.domain.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.util.List;
 
 @RestController
@@ -18,23 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostRestController {
     private final PostService postService;
-    private final ImageService imageService;
     private final CommentService commentService;
-    private String path="src/main/resources/static/images/";
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public PostDto.PostDetailRes createPost(@RequestBody @Valid final PostDto.CreateReq dto) {
-        Post post = postService.save(dto);
-        File dir=new File(path+post.getId());
-        dir.mkdir();
-
-        if (dto.getImages()!=null)
-            imageService.save(dto.getImages(), post);
-
-        PostDto.PostDetailRes postDetailRes = new PostDto.PostDetailRes(post, dto.getImages());
-
-        return postDetailRes;
+    public PostDto.PostDetailRes createPost(@RequestBody @Valid final PostDto.CreateReq dto,@RequestHeader("X-AUTH-TOKEN") String token) {
+        return postService.save(dto,token);
     }
 
     @GetMapping("/{id}")
