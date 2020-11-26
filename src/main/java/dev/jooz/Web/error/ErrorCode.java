@@ -10,8 +10,9 @@ public enum ErrorCode {
     INPUT_VALUE_INVALID("ERR_004","입력값이 올바르지 않습니다.",400),
     NO_IMAGE("IMG_001","이미지 파일만 등록 가능합니다.",400),
     NO_FILE_UPLOAD("IMG_002","업로드할 파일이 없습니다.",400),
-    TOO_MANY_IMAGE("IMG_003","이미지는 5장까지 등록가능합니다.",400);
-
+    TOO_MANY_IMAGE("IMG_003","이미지는 5장까지 등록가능합니다.",400),
+    INVALID_TOKEN("ACC_001","유효하지 않은 토큰입니다.",400),
+    USER_NOT_EXIST("ACC_002","존재하지 않는 유저입니다.",400);
     private final String code;
     private final String message;
     private final int status;

@@ -1,6 +1,8 @@
 package dev.jooz.Web.error;
 
 import dev.jooz.Web.exception.account.EmailExistException;
+import dev.jooz.Web.exception.account.InvalidTokenException;
+import dev.jooz.Web.exception.account.UserNotExistException;
 import dev.jooz.Web.exception.account.UsernameExistsException;
 import dev.jooz.Web.exception.image.NoFileUploadException;
 import dev.jooz.Web.exception.image.NoImageException;
@@ -67,6 +69,20 @@ public class ErrorExceptionController {
     protected ErrorResponse handleTooManyImageException(TooManyImageException e){
         final ErrorCode tooMany=ErrorCode.TOO_MANY_IMAGE;
         return buildError(tooMany);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleInvalidTokenException(InvalidTokenException e){
+        final ErrorCode token=ErrorCode.INVALID_TOKEN;
+        return buildError(token);
+    }
+
+    @ExceptionHandler(UserNotExistException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handleUserNotExistException(UserNotExistException e){
+        final ErrorCode user=ErrorCode.USER_NOT_EXIST;
+        return buildError(user);
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {

@@ -1,6 +1,7 @@
 package dev.jooz.Web.domain.post;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import dev.jooz.Web.domain.account.Account;
 import dev.jooz.Web.domain.image.ImageDto;
 import lombok.*;
 
@@ -14,6 +15,8 @@ public class PostDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CreateReq{
+        @Setter
+        Account account;
 
         @NotEmpty
         private String category;
@@ -40,6 +43,7 @@ public class PostDto {
         public Post toEntity(){
             return Post.builder()
                     .title(title)
+                    .account(account)
                     .content(content)
                     .category(category)
                     .price(price)

@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.account;
 
+import dev.jooz.Web.exception.account.UserNotExistException;
 import dev.jooz.Web.util.RedisUtil;
 import dev.jooz.Web.exception.account.UsernameExistsException;
 import dev.jooz.Web.util.JwtUtil;
@@ -46,6 +47,14 @@ public class AccountService {
         Optional<Account> account=accountRepository.findById(id);
         account.orElseThrow(()-> new NoSuchElementException());
         return account.get();
+    }
+
+    public Account findByUsername(String username){
+        Optional<Account> accountOptional=accountRepository.findByUsername(username);
+
+        accountOptional.orElseThrow(()->new UserNotExistException(username));
+
+        return accountOptional.get();
     }
 
     public AccountDto.AccountRes loginAccount(AccountDto.LoginReq dto){
