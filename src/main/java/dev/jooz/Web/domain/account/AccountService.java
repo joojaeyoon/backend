@@ -1,5 +1,8 @@
 package dev.jooz.Web.domain.account;
 
+import dev.jooz.Web.util.RedisUtil;
+import dev.jooz.Web.exception.account.UsernameExistsException;
+import dev.jooz.Web.util.JwtUtil;
 import dev.jooz.Web.util.PasswordEncoding;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
-    public Account save(AccountDto.CreateReq dto){
-        return accountRepository.save(dto.toEntity());
+    public AccountDto.AccountRes save(AccountDto.CreateReq dto){
+        if(existsByUsername(dto.getUsername()))
+            throw new UsernameExistsException(dto.getUsername());
+
+        PasswordEncoding passwordEncoding=new PasswordEncoding();
+        dto.setPassword(passwordEncoding.encode(dto.getPassword()));
+        dto.setRole(AccountRole.ROLE_USER);
+
+        final String token=jwtUtil.generateToken(dto.getUsername());
+        final String refreshJwt=jwtUtil.generateRefreshToken(dto.getUsername());
+
+        redisUtil.setDataExpire(token,dto.getUsername(),jwtUtil.TOKEN_VALIDATION_SECOND);
+        redisUtil.setDataExpire(refreshJwt,dto.getUsername(),jwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+
+        Account account=accountRepository.save(dto.toEntity());
+
+        return new AccountDto.AccountRes(account.getUsername(),token,refreshJwt);
     }
 
-    public boolean existsByEmail(String email){
-        return accountRepository.existsByEmail(email);
-    }
     public boolean existsByUsername(String username){
         return accountRepository.existsByUsername(username);
     }
@@ -31,14 +48,23 @@ public class AccountService {
         return account.get();
     }
 
-    public boolean loginAccount(AccountDto.LoginReq dto){
+    public AccountDto.AccountRes loginAccount(AccountDto.LoginReq dto){
         PasswordEncoding passwordEncoding=new PasswordEncoding();
 
         Optional<Account> account=accountRepository.findByUsername(dto.getUsername());
         account.orElseThrow(()->new NoSuchElementException());
 
-        if(passwordEncoding.matches(dto.getPassword(),account.get().getPassword()))
-            return true;
-        return false;
+        String passwordA=dto.getPassword();
+        String passwordB=account.get().getPassword();
+        if(!passwordEncoding.matches(passwordA,passwordB))
+            throw new NoSuchElementException();
+
+        final String token=jwtUtil.generateToken(dto.getUsername());
+        final String refreshJwt=jwtUtil.generateRefreshToken(dto.getUsername());
+
+        redisUtil.setDataExpire(token,dto.getUsername(),jwtUtil.TOKEN_VALIDATION_SECOND);
+        redisUtil.setDataExpire(refreshJwt,dto.getUsername(),jwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+
+        return new AccountDto.AccountRes(dto.getUsername(),token,refreshJwt);
     }
 }
