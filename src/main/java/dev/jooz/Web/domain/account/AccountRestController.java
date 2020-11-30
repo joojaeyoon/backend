@@ -24,8 +24,4 @@ public class AccountRestController {
     public AccountDto.AccountRes loginAccount(@RequestBody @Valid final AccountDto.LoginReq dto){
         return accountService.loginAccount(dto);
     }
-
-    // TODO Refresh 요청 API
-    // TODO Redis에 토큰 저장해서 확인하는거
-    // TODO 각 게시물, 댓글 생성 시 토큰확인
 }

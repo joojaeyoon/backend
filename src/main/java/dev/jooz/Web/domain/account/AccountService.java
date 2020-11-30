@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.account;
 
+import dev.jooz.Web.exception.account.PasswordNotMatchException;
 import dev.jooz.Web.exception.account.UserNotExistException;
 import dev.jooz.Web.util.RedisUtil;
 import dev.jooz.Web.exception.account.UsernameExistsException;
@@ -66,13 +67,15 @@ public class AccountService {
         String passwordA=dto.getPassword();
         String passwordB=account.get().getPassword();
         if(!passwordEncoding.matches(passwordA,passwordB))
-            throw new NoSuchElementException();
+            throw new PasswordNotMatchException();
 
         final String token=jwtUtil.generateToken(dto.getUsername());
         final String refreshJwt=jwtUtil.generateRefreshToken(dto.getUsername());
 
         redisUtil.setDataExpire(token,dto.getUsername(),jwtUtil.TOKEN_VALIDATION_SECOND);
         redisUtil.setDataExpire(refreshJwt,dto.getUsername(),jwtUtil.REFRESH_TOKEN_VALIDATION_SECOND);
+
+        // TODO 로그인 할 때랑 가입 할 때 토큰이 따로따로 생기는거 방지하기
 
         return new AccountDto.AccountRes(dto.getUsername(),token,refreshJwt);
     }

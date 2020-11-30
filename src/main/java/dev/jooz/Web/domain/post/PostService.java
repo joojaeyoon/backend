@@ -25,7 +25,7 @@ public class PostService {
     private final ImageService imageService;
     private final JwtUtil jwtUtil;
 
-    private String path="src/main/resources/static/images/";
+    private final String path="src/main/resources/static/images/";
 
 
     public PostDto.PostDetailRes save(PostDto.CreateReq dto,String token){

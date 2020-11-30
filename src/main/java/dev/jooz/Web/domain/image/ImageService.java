@@ -20,7 +20,7 @@ import java.util.List;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final ImageFile imageFile;
-    private String path="src/main/resources/static/images/";
+    private final String path="src/main/resources/static/images/";
 
     public ImageDto.ImageCreateDto findByPost(Post post){
         Image image=imageRepository.findByPost(post);
@@ -53,8 +53,8 @@ public class ImageService {
             }
         }
 
-        for (int i = 0; i < files.length; i++) {
-            String name = imageFile.write(files[i]);
+        for (MultipartFile file : files) {
+            String name = imageFile.write(file);
             resDtos.add(new ImageDto.ImageCreateDto(name));
         }
 
@@ -62,9 +62,9 @@ public class ImageService {
     }
 
     public void save(List<ImageDto.ImageCreateDto> dtos, Post post) {
-        for (int i = 0; i < dtos.size(); i++) {
-            String name=dtos.get(i).getName();
-            imageRepository.save(dtos.get(i).toEntity(post));
+        for (ImageDto.ImageCreateDto dto : dtos) {
+            String name=dto.getName();
+            imageRepository.save(dto.toEntity(post));
             File img=new File(path+name);
             File to=new File(path+post.getId()+"/"+name);
 
@@ -76,8 +76,6 @@ public class ImageService {
     public ImageDto.ImageCreateDto findFirstByPost(Post post){
         Image image=imageRepository.findFirstByPost(post);
 
-        ImageDto.ImageCreateDto img=new ImageDto.ImageCreateDto(image);
-
-        return img;
+        return new ImageDto.ImageCreateDto(image);
     }
 }
