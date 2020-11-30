@@ -30,6 +30,9 @@ public class PostDto {
         @NotNull
         private Long price;
 
+        @Setter
+        private boolean completed;
+
         private List<ImageDto.ImageCreateDto> images;
 
         @Builder
@@ -39,6 +42,7 @@ public class PostDto {
             this.content=content;
             this.price=price;
             this.images=images;
+            this.completed=false;
         }
         public Post toEntity(){
             return Post.builder()
@@ -47,6 +51,7 @@ public class PostDto {
                     .content(content)
                     .category(category)
                     .price(price)
+                    .completed(completed)
                     .build();
         }
     }

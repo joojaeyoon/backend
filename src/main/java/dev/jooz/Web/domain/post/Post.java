@@ -32,13 +32,18 @@ public class Post extends AuditorEntity {
     @Column
     private Long price;
 
+    @Column
+    private boolean completed;
+
     @Builder
-    public Post(Account account, String category, String title, String content, Long price) {
+    public Post(Account account, String category, String title, String content, Long price,boolean completed) {
         this.account = account;
         this.category = category;
         this.title = title;
         this.content = content;
         this.price = price;
+        this.completed=completed;
+
     }
 
     public void updatePost(PostDto.UpdateReq dto) {
