@@ -11,4 +11,6 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
     public Image findByPost(Post post);
 
+    public Image findFirstByPost(Post post);
+
 }

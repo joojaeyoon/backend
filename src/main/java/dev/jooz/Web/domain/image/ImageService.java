@@ -72,4 +72,12 @@ public class ImageService {
 
         }
     }
+
+    public ImageDto.ImageCreateDto findFirstByPost(Post post){
+        Image image=imageRepository.findFirstByPost(post);
+
+        ImageDto.ImageCreateDto img=new ImageDto.ImageCreateDto(image);
+
+        return img;
+    }
 }
