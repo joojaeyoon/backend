@@ -1,5 +1,6 @@
 package dev.jooz.Web.error;
 
+import dev.jooz.Web.exception.CustomException;
 import dev.jooz.Web.exception.account.EmailExistException;
 import dev.jooz.Web.exception.account.InvalidTokenException;
 import dev.jooz.Web.exception.account.UserNotExistException;
@@ -29,20 +30,6 @@ public class ErrorExceptionController {
         return buildErrors(ErrorCode.INPUT_VALUE_INVALID,fieldErrors);
     }
 
-    @ExceptionHandler(EmailExistException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleEmailExistException(EmailExistException e){
-        final ErrorCode emailExist=ErrorCode.EMAIL_ALREADY_EXIST;
-        return buildError(emailExist);
-    }
-
-    @ExceptionHandler(UsernameExistsException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleUsernameExistException(UsernameExistsException e){
-        final ErrorCode usernameExist=ErrorCode.USERNAME_ALREADY_EXIST;
-        return buildError(usernameExist);
-    }
-
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     protected ErrorResponse handleNoSuchElementException(NoSuchElementException e){
@@ -50,39 +37,19 @@ public class ErrorExceptionController {
         return buildError(noSuchElement);
     }
 
-    @ExceptionHandler(NoImageException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleNoImageException(NoImageException e){
-        final ErrorCode noImage=ErrorCode.NO_IMAGE;
-        return buildError(noImage);
-    }
 
-    @ExceptionHandler(NoFileUploadException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleNoFileUploadException(NoFileUploadException e){
-        final ErrorCode noFile=ErrorCode.NO_FILE_UPLOAD;
-        return buildError(noFile);
-    }
-
-    @ExceptionHandler(TooManyImageException.class)
+    @ExceptionHandler({
+            EmailExistException.class,
+            UsernameExistsException.class,
+            NoImageException.class,
+            NoFileUploadException.class,
+            TooManyImageException.class,
+            InvalidTokenException.class,
+            UserNotExistException.class
+    })
     @ResponseStatus(value=HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleTooManyImageException(TooManyImageException e){
-        final ErrorCode tooMany=ErrorCode.TOO_MANY_IMAGE;
-        return buildError(tooMany);
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleInvalidTokenException(InvalidTokenException e){
-        final ErrorCode token=ErrorCode.INVALID_TOKEN;
-        return buildError(token);
-    }
-
-    @ExceptionHandler(UserNotExistException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    protected ErrorResponse handleUserNotExistException(UserNotExistException e){
-        final ErrorCode user=ErrorCode.USER_NOT_EXIST;
-        return buildError(user);
+    protected ErrorResponse CustomErrorException(CustomException e){
+        return buildError(e.getErrorCode());
     }
 
     private List<ErrorResponse.FieldError> getFieldErrors(BindingResult bindingResult) {
