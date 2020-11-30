@@ -1,10 +1,7 @@
 package dev.jooz.Web.error;
 
 import dev.jooz.Web.exception.CustomException;
-import dev.jooz.Web.exception.account.EmailExistException;
-import dev.jooz.Web.exception.account.InvalidTokenException;
-import dev.jooz.Web.exception.account.UserNotExistException;
-import dev.jooz.Web.exception.account.UsernameExistsException;
+import dev.jooz.Web.exception.account.*;
 import dev.jooz.Web.exception.image.NoFileUploadException;
 import dev.jooz.Web.exception.image.NoImageException;
 import dev.jooz.Web.exception.image.TooManyImageException;
@@ -45,7 +42,8 @@ public class ErrorExceptionController {
             NoFileUploadException.class,
             TooManyImageException.class,
             InvalidTokenException.class,
-            UserNotExistException.class
+            UserNotExistException.class,
+            PasswordNotMatchException.class
     })
     @ResponseStatus(value=HttpStatus.BAD_REQUEST)
     protected ErrorResponse CustomErrorException(CustomException e){
