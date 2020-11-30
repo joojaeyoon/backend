@@ -7,15 +7,11 @@ import dev.jooz.Web.domain.image.ImageService;
 import dev.jooz.Web.exception.account.InvalidTokenException;
 import dev.jooz.Web.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,7 +27,6 @@ public class PostService {
 
     private String path="src/main/resources/static/images/";
 
-    private Logger logger= LoggerFactory.getLogger(this.getClass());
 
     public PostDto.PostDetailRes save(PostDto.CreateReq dto,String token){
 
@@ -41,13 +36,14 @@ public class PostService {
             if (!jwtUtil.validateToken(token, username))
                 throw new Exception();
 
-            // TODO postDto에 해당하는 Account 넣어주기
             Account account=accountService.findByUsername(username);
             dto.setAccount(account);
         }
         catch (Exception e){
             throw new InvalidTokenException(token);
         }
+
+        dto.setCompleted(false);
 
         Post post=postRepository.save(dto.toEntity());
         File dir=new File(path+post.getId());
@@ -56,24 +52,19 @@ public class PostService {
         if (dto.getImages()!=null)
             imageService.save(dto.getImages(), post);
 
-        PostDto.PostDetailRes postDetailRes=new PostDto.PostDetailRes(post,dto.getImages());
-
-        return postDetailRes;
+        return new PostDto.PostDetailRes(post,dto.getImages());
     }
 
     @Transactional(readOnly = true)
-    public Page<PostDto.PostRes> findAll(Pageable pageable){
-
-        Page<PostDto.PostRes> pages=postRepository.findAll(pageable).map(post -> {
-            ImageDto.ImageCreateDto image=imageService.findByPost(post);
+    public Page<PostDto.PostRes> findAll(final PageRequest pageRequest){
+        return postRepository.findAll(pageRequest.of()).map(post -> {
+            ImageDto.ImageCreateDto image=imageService.findFirstByPost(post);
 
             if(image==null)
                 return new PostDto.PostRes(post,new ImageDto.ImageCreateDto("Default.png"));
 
             return new PostDto.PostRes(post, image);
         });
-
-        return pages;
     }
 
     public PostDto.PostDetailRes findById(Long id){
@@ -82,9 +73,7 @@ public class PostService {
         post.orElseThrow(()-> new NoSuchElementException());
 
         List<ImageDto.ImageCreateDto> images=imageService.findAllByPost(post.get());
-        PostDto.PostDetailRes postDetailRes=new PostDto.PostDetailRes(post.get(),images);
-
-        return postDetailRes;
+        return new PostDto.PostDetailRes(post.get(),images);
     }
 
     public PostDto.PostRes update(Long id,PostDto.UpdateReq dto){

@@ -33,7 +33,7 @@ public class PostRestController {
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public Page<PostDto.PostRes> getPostList(final PageRequest pageable) {
-        return postService.findAll(pageable.of());
+        return postService.findAll(pageable);
     }
 
     @PutMapping("/{id}")
