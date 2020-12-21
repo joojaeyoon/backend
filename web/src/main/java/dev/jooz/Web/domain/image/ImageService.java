@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.image;
 
+import dev.jooz.Web.aws.S3Uploader;
 import dev.jooz.Web.exception.image.NoFileUploadException;
 import dev.jooz.Web.exception.image.NoImageException;
 import dev.jooz.Web.exception.image.TooManyImageException;
@@ -21,6 +22,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final ImageFile imageFile;
     private final String path="src/main/resources/static/images/";
+    private final S3Uploader s3Uploader;
 
     public ImageDto.ImageCreateDto findByPost(Post post){
         Image image=imageRepository.findByPost(post);
@@ -55,6 +57,8 @@ public class ImageService {
 
         for (MultipartFile file : files) {
             String name = imageFile.write(file);
+
+            s3Uploader.upload(file,"test");
             resDtos.add(new ImageDto.ImageCreateDto(name));
         }
 

@@ -23,6 +23,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/libs-milestone'}
 }
 
 dependencies {
@@ -35,6 +36,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.jetbrains:annotations:19.0.0'
+
+    // aws s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
 
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2',
@@ -50,6 +54,12 @@ dependencies {
 	}
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'com.h2database:h2:1.4.200'
+}
+
+dependencyManagement{
+	imports{
+		mavenBom 'org.springframework.cloud:spring-cloud-aws:2.2.1.RELEASE'
+	}
 }
 
 test {

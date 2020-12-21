@@ -39,3 +39,6 @@ mysql/
 
 ### static files ###
 src/main/resources/static/*
+
+### aws ###
+application-aws.yml
