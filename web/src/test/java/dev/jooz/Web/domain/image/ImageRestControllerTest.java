@@ -2,7 +2,6 @@ package dev.jooz.Web.domain.image;
 
 import com.jayway.jsonpath.JsonPath;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,22 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ImageRestControllerTest {
     @Autowired
-    MockMvc mvc;
+    private ImageService imageService;
+    @Autowired
+    private MockMvc mvc;
 
     List<String> fileList = new ArrayList<>();
-
-    @AfterAll
-    public void cleanUp() {
-        String path = "src/main/resources/static/images/";
-
-        for (String file : fileList) {
-            File f = new File(path + file);
-
-            if (f.exists() && f.delete()) {
-                System.out.println(f.getPath() + " - deleted");
-            }
-        }
-    }
 
     @Test
     @DisplayName("이미지 업로드 테스트")
@@ -111,5 +98,19 @@ public class ImageRestControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("S3 이미지 업로드")
+    public void upload_image_to_s3() throws Exception{
+        MockMultipartFile file=new MockMultipartFile("files","test.png",MediaType.IMAGE_PNG_VALUE,"Test".getBytes());
+
+        mvc.perform(multipart("/api/image")
+                .file(file)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$[0].name").exists())
+                .andDo(print());
+
     }
 }

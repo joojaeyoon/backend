@@ -17,3 +17,6 @@ spring:
       root: INFO
   jwt:
     secret: my-super-secret-secery-keyidasfokdsmfkmdslmfl
+  profiles:
+    include:
+      - aws
