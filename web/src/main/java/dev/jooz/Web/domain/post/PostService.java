@@ -49,8 +49,8 @@ public class PostService {
         File dir=new File(path+post.getId());
         dir.mkdir();
 
-        if (dto.getImages()!=null)
-            imageService.save(dto.getImages(), post);
+//        if (dto.getImages()!=null)
+//            imageService.save(dto.getImages(), post);
 
         return new PostDto.PostDetailRes(post,dto.getImages());
     }

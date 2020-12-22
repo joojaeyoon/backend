@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -21,8 +22,14 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private String path="src/main/resources/temp/";
+
     private Optional<File> convert(MultipartFile file) throws IOException{
-        File convertFile=new File(file.getOriginalFilename());
+        UUID uuid=UUID.randomUUID();
+        String name=file.getOriginalFilename();
+        name=path+uuid.toString()+"-"+name;
+        File convertFile=new File(name);
+
         if(convertFile.createNewFile()){
             try(FileOutputStream fos=new FileOutputStream(convertFile)){
                 fos.write(file.getBytes());
@@ -32,15 +39,16 @@ public class S3Uploader {
         return Optional.empty();
     }
 
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException{
+    public String upload(MultipartFile multipartFile) throws IOException{
         File uploadFile=convert(multipartFile)
-                .orElseThrow(()->new IllegalArgumentException("Failed to convert multiparfile"));
-        return upload(uploadFile,dirName);
+                .orElseThrow(()->new IllegalArgumentException("Failed to convert multipartfile"));
+        return upload(uploadFile,uploadFile.getName());
     }
 
     public String upload(File uploadFile,String fileName){
+        fileName="static/"+fileName;
+
         amazonS3Client.putObject(new PutObjectRequest(bucket,fileName,uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket,fileName).toString();
     }
-
 }

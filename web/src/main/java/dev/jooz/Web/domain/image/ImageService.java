@@ -7,6 +7,7 @@ import dev.jooz.Web.exception.image.TooManyImageException;
 import dev.jooz.Web.domain.post.Post;
 import dev.jooz.Web.util.ImageFile;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,11 +57,11 @@ public class ImageService {
         }
 
         for (MultipartFile file : files) {
-            String name = imageFile.write(file);
-
-            s3Uploader.upload(file,"test");
+            String name=s3Uploader.upload(file);
             resDtos.add(new ImageDto.ImageCreateDto(name));
         }
+
+        FileUtils.cleanDirectory(new File("src/main/resources/temp"));
 
         return resDtos;
     }
