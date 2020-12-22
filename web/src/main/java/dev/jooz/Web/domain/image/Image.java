@@ -21,7 +21,7 @@ public class Image {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @Column(length=255,nullable = false)
+    @Column(length=512,nullable = false)
     private String url;
 
     @Builder

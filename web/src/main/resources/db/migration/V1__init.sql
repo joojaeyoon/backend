@@ -25,7 +25,7 @@ create table post(
 
 create table post_img(
     id int AUTO_INCREMENT,
-    url VARCHAR(255) NOT NULL,
+    url VARCHAR(512) NOT NULL,
     post_id int,
     primary key(id),
     foreign key(post_id) references post(id) on delete CASCADE
