@@ -75,6 +75,10 @@ public class ImageService {
     public ImageDto.ImageCreateDto findFirstByPost(Post post){
         Image image=imageRepository.findFirstByPost(post);
 
+        if(image==null){
+            return new ImageDto.ImageCreateDto("Default.png");
+        }
+
         return new ImageDto.ImageCreateDto(image);
     }
 }
