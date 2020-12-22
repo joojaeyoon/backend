@@ -1,5 +1,6 @@
 package dev.jooz.Web.domain.post;
 
+import dev.jooz.Web.aws.S3Uploader;
 import dev.jooz.Web.domain.account.Account;
 import dev.jooz.Web.domain.account.AccountService;
 import dev.jooz.Web.domain.image.ImageDto;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,6 +24,7 @@ public class PostService {
     private final AccountService accountService;
     private final ImageService imageService;
     private final JwtUtil jwtUtil;
+    private final S3Uploader s3Uploader;
 
     private final String path="src/main/resources/static/images/";
 
@@ -84,10 +85,21 @@ public class PostService {
         return new PostDto.PostRes(post);
     }
 
-    public void delete(Long id){
+    public void delete(Long id,String token){
+
         Optional<Post> optionalPost=postRepository.findById(id);
         optionalPost.orElseThrow(()-> new NoSuchElementException());
         Post post=optionalPost.get();
+        String username=post.getAccount().getUsername();
+
+        if(!jwtUtil.validateToken(token,username))
+            throw new InvalidTokenException(token);
+
+        List<ImageDto.ImageCreateDto> images=imageService.findAllByPost(post);
+
+        for(ImageDto.ImageCreateDto image : images){
+            s3Uploader.delete(image.getName());
+        }
 
         postRepository.delete(post);
     }

@@ -49,6 +49,10 @@ public class S3Uploader {
         fileName="static/"+fileName;
 
         amazonS3Client.putObject(new PutObjectRequest(bucket,fileName,uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3Client.getUrl(bucket,fileName).toString();
+        return fileName;
+    }
+
+    public void delete(String key){
+        amazonS3Client.deleteObject(bucket,key);
     }
 }

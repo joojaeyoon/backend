@@ -13,7 +13,8 @@ public enum ErrorCode {
     TOO_MANY_IMAGE("IMG_003","이미지는 5장까지 등록가능합니다.",400),
     INVALID_TOKEN("ACC_001","유효하지 않은 토큰입니다.",400),
     USER_NOT_EXIST("ACC_002","존재하지 않는 유저입니다.",400),
-    PASSWORD_NOT_MATCH("ACC_003","패스워드가 일치하지 않습니다.",400);
+    PASSWORD_NOT_MATCH("ACC_003","패스워드가 일치하지 않습니다.",400),
+    EXPIRED_JWT("JWT_001","토큰이 만료되었습니다.",400);
 
     private final String code;
     private final String message;

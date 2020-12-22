@@ -44,8 +44,8 @@ public class PostRestController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public ResponseEntity deletePost(@PathVariable Long id) {
-        postService.delete(id);
+    public ResponseEntity deletePost(@PathVariable Long id,@RequestHeader("X-AUTH-TOKEN") String token) {
+        postService.delete(id,token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
