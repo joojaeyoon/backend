@@ -22,7 +22,7 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String path="src/main/resources/temp/";
+    private final String path="src/main/resources/temp/";
 
     private Optional<File> convert(MultipartFile file) throws IOException{
         UUID uuid=UUID.randomUUID();

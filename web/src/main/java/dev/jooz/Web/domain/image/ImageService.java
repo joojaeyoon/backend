@@ -68,13 +68,7 @@ public class ImageService {
 
     public void save(List<ImageDto.ImageCreateDto> dtos, Post post) {
         for (ImageDto.ImageCreateDto dto : dtos) {
-            String name=dto.getName();
             imageRepository.save(dto.toEntity(post));
-            File img=new File(path+name);
-            File to=new File(path+post.getId()+"/"+name);
-
-            img.renameTo(to);
-
         }
     }
 

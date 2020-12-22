@@ -46,11 +46,9 @@ public class PostService {
         dto.setCompleted(false);
 
         Post post=postRepository.save(dto.toEntity());
-        File dir=new File(path+post.getId());
-        dir.mkdir();
 
-//        if (dto.getImages()!=null)
-//            imageService.save(dto.getImages(), post);
+        if (dto.getImages()!=null)
+            imageService.save(dto.getImages(), post);
 
         return new PostDto.PostDetailRes(post,dto.getImages());
     }
